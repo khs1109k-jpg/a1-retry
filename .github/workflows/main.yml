@@ -22,7 +22,8 @@ jobs:
         run: |
           mkdir -p ~/.oci ~/.ssh
           printf '%s' "$OCI_KEY" | tr -d ' \r\n' | base64 -d > ~/.oci/key.pem && chmod 600 ~/.oci/key.pem
-          "$OCI_USER" "$OCI_FINGERPRINT" "$OCI_TENANCY" > ~/.oci/config
+          head -1 ~/.oci/key.pem
+          printf '[DEFAULT]\nuser=%s\nfingerprint=%s\ntenancy=%s\nregion=ap-tokyo-1\nkey_file=~/.oci/key.pem\n' "$OCI_USER" "$OCI_FINGERPRINT" "$OCI_TENANCY" > ~/.oci/config
           chmod 600 ~/.oci/config
           printf '%s\n' "$SSH_PUB" > ~/.ssh/id_rsa.pub
       - name: A1 생성 시도
